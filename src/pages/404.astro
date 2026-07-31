@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import { useTranslations } from '../i18n/utils';
+const lang = 'en';
+const t = useTranslations(lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={t.seo.notFound.title}
+  description={t.seo.notFound.desc}
+  canonicalPath="/"
+>
+  <section class="relative overflow-hidden">
+    <div
+      class="pointer-events-none absolute -top-24 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-green-200/40 blur-[110px]"
+      aria-hidden="true"
+    >
+    </div>
+    <div class="container-page py-28 text-center md:py-36">
+      <p
+        class="text-gradient text-7xl font-bold md:text-8xl"
+        style="font-family:var(--font-display)"
+      >
+        404
+      </p>
+      <h1 class="mt-4 text-3xl md:text-4xl">{t.notFound.title}</h1>
+      <p class="mx-auto mt-4 max-w-md text-lg text-body">
+        {t.notFound.subtitle}
+      </p>
+      <div class="mt-8 flex justify-center">
+        <Button href="/" variant="gradient" size="lg">{t.notFound.back}</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

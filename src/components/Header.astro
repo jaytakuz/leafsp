@@ -1,0 +1,156 @@
+---
+import type { Lang } from '../i18n/utils';
+import { localizePath, stripLocale, useTranslations } from '../i18n/utils';
+import { NAV_ITEMS, ROUTES } from '../config';
+import Logo from './Logo.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const canonical = stripLocale(Astro.url.pathname);
+
+const navLinks = NAV_ITEMS.map((key) => ({
+  key,
+  label: t.nav[key],
+  href: localizePath(ROUTES[key], lang),
+  active:
+    ROUTES[key] === '/'
+      ? canonical === '/'
+      : canonical === ROUTES[key],
+}));
+
+const homeHref = localizePath('/', lang);
+const contactHref = localizePath(ROUTES.contact, lang);
+---
+
+<header
+  id="site-header"
+  class="sticky top-0 z-50 border-b border-transparent transition-all duration-300"
+  data-header
+>
+  <div class="container-page">
+    <div class="flex h-16 items-center justify-between gap-4 md:h-[4.5rem]">
+      <a
+        href={homeHref}
+        class="flex shrink-0 items-center rounded-lg focus-visible:outline-2 focus-visible:outline-green-600"
+        aria-label={t.nav.home}
+      >
+        <Logo class="h-7 w-auto md:h-8" />
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden items-center gap-1 md:flex" aria-label="Primary">
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              aria-current={link.active ? 'page' : undefined}
+              class:list={[
+                'relative rounded-lg px-3.5 py-2 text-[0.95rem] font-medium transition-colors',
+                link.active
+                  ? 'text-green-700'
+                  : 'text-body hover:text-green-700',
+              ]}
+            >
+              {link.label}
+              {link.active && (
+                <span class="absolute inset-x-3.5 -bottom-px h-0.5 rounded-full bg-brand-gradient" />
+              )}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="flex items-center gap-2.5">
+        <LanguageSwitcher lang={lang} class="hidden sm:inline-flex" />
+        <Button href={contactHref} size="md" class="hidden md:inline-flex">
+          {t.cta.startProject}
+        </Button>
+
+        <!-- Mobile menu toggle -->
+        <button
+          type="button"
+          class="group inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-white text-text md:hidden"
+          aria-label="Menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          data-menu-toggle
+        >
+          <Icon name="menu" size={22} class="group-aria-expanded:hidden" />
+          <Icon
+            name="close"
+            size={22}
+            class="hidden group-aria-expanded:block"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-border bg-white/95 backdrop-blur md:hidden"
+    data-menu-panel
+  >
+    <nav class="container-page flex flex-col gap-1 py-4" aria-label="Mobile">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            aria-current={link.active ? 'page' : undefined}
+            class:list={[
+              'rounded-xl px-4 py-3 text-base font-medium transition-colors',
+              link.active
+                ? 'bg-green-50 text-green-700'
+                : 'text-body hover:bg-surface-soft',
+            ]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <div class="mt-2 flex items-center justify-between gap-3 px-1">
+        <LanguageSwitcher lang={lang} />
+        <Button href={contactHref} class="flex-1">{t.cta.startProject}</Button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Sticky header shadow + mobile menu toggle (tiny, dependency-free)
+  const header = document.querySelector('[data-header]');
+  const onScroll = () => {
+    if (!header) return;
+    if (window.scrollY > 8) header.classList.add('is-scrolled');
+    else header.classList.remove('is-scrolled');
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const toggle = document.querySelector('[data-menu-toggle]');
+  const panel = document.querySelector('[data-menu-panel]');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    panel?.classList.toggle('hidden', open);
+  });
+</script>
+
+<style>
+  [data-header] {
+    background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+    backdrop-filter: saturate(150%) blur(12px);
+  }
+  [data-header].is-scrolled {
+    border-bottom-color: var(--color-border);
+    box-shadow: 0 6px 24px -18px rgba(13, 31, 22, 0.4);
+    background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  }
+</style>

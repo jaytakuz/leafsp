@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AboutBody from '../../components/sections/AboutBody.astro';
+import { useTranslations } from '../../i18n/utils';
+const lang = 'th';
+const t = useTranslations(lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={t.seo.about.title}
+  description={t.seo.about.desc}
+  canonicalPath="/about"
+>
+  <AboutBody lang={lang} />
+</BaseLayout>

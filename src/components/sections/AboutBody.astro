@@ -1,0 +1,190 @@
+---
+import type { Lang } from '../../i18n/utils';
+import { localizePath, useTranslations } from '../../i18n/utils';
+import { ROUTES, SITE } from '../../config';
+import Section from '../Section.astro';
+import Button from '../Button.astro';
+import Icon from '../Icon.astro';
+import Logo from '../Logo.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const contactHref = localizePath(ROUTES.contact, lang);
+
+const aboutValues = ['clarity', 'quality', 'growth', 'partnership'] as const;
+const valueIcons: Record<string, string> = {
+  clarity: 'sparkle',
+  quality: 'shield',
+  growth: 'sprout',
+  partnership: 'heart',
+};
+
+const address = lang === 'th' ? SITE.addressTh : SITE.addressEn;
+const city = lang === 'th' ? SITE.cityTh : SITE.city;
+---
+
+<!-- Hero -->
+<section class="relative overflow-hidden border-b border-border">
+  <div
+    class="pointer-events-none absolute -left-24 -top-28 h-96 w-96 rounded-full bg-green-200/40 blur-[110px]"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="container-page py-16 md:py-24">
+    <div class="grid items-center gap-12 md:grid-cols-2">
+      <div class="reveal is-visible">
+        <span class="eyebrow">{t.aboutPage.eyebrow}</span>
+        <h1 class="mt-4 text-4xl md:text-5xl">{t.aboutPage.title}</h1>
+        <p class="mt-6 text-lg leading-relaxed text-body">{t.aboutPage.lead}</p>
+      </div>
+      <div class="reveal is-visible relative mx-auto w-full max-w-sm">
+        <div
+          class="relative overflow-hidden rounded-3xl bg-ink p-10 shadow-card"
+        >
+          <div
+            class="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full bg-green-500/30 blur-[70px]"
+            aria-hidden="true"
+          >
+          </div>
+          <div
+            class="pointer-events-none absolute -bottom-12 -left-8 h-48 w-48 rounded-full bg-lime-500/20 blur-[70px]"
+            aria-hidden="true"
+          >
+          </div>
+          <div class="relative flex flex-col items-center text-center">
+            <div class="rounded-2xl bg-white/[0.04] p-5">
+              <Logo variant="mark" class="h-20 w-20" />
+            </div>
+            <p
+              class="mt-6 text-xl font-semibold text-white"
+              style="font-family:var(--font-display)"
+            >
+              {SITE.shortName}
+            </p>
+            <p class="mt-1 text-sm text-[#9fb2a8]">{city}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission + Philosophy -->
+<Section bg="soft">
+  <div class="grid gap-6 md:grid-cols-2">
+    <div class="reveal rounded-3xl border border-border bg-white p-8 shadow-soft">
+      <span
+        class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600"
+      >
+        <Icon name="compass" size={24} />
+      </span>
+      <h2 class="mt-5 text-2xl font-semibold text-text">
+        {t.aboutPage.missionTitle}
+      </h2>
+      <p class="mt-3 leading-relaxed text-body">{t.aboutPage.mission}</p>
+    </div>
+    <div class="reveal rounded-3xl border border-border bg-white p-8 shadow-soft">
+      <span
+        class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600"
+      >
+        <Icon name="sprout" size={24} />
+      </span>
+      <h2 class="mt-5 text-2xl font-semibold text-text">
+        {t.aboutPage.philosophyTitle}
+      </h2>
+      <p class="mt-3 leading-relaxed text-body">{t.aboutPage.philosophy}</p>
+    </div>
+  </div>
+</Section>
+
+<!-- Values -->
+<Section bg="white">
+  <div class="mx-auto max-w-2xl text-center">
+    <h2 class="text-3xl md:text-4xl">{t.aboutPage.valuesTitle}</h2>
+  </div>
+  <div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      aboutValues.map((key) => (
+        <div class="reveal">
+          <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600">
+            <Icon name={valueIcons[key]} size={24} />
+          </div>
+          <h3 class="mt-4 text-lg font-semibold text-text">
+            {t.aboutPage.values[key].title}
+          </h3>
+          <p class="mt-2 text-[0.95rem] leading-relaxed text-body">
+            {t.aboutPage.values[key].desc}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+</Section>
+
+<!-- Company details -->
+<Section bg="tint">
+  <div class="mx-auto max-w-4xl">
+    <div class="rounded-3xl border border-border bg-white p-8 shadow-soft md:p-10">
+      <h2 class="text-2xl font-semibold text-text">{t.aboutPage.factsTitle}</h2>
+      <dl class="mt-6 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+        <div class="flex gap-3">
+          <Icon name="sparkle" size={20} class="mt-0.5 shrink-0 text-green-600" />
+          <div>
+            <dt class="text-sm font-medium text-muted">
+              {t.aboutPage.facts.registered}
+            </dt>
+            <dd class="mt-0.5 font-medium text-text">{SITE.companyEn}</dd>
+            <dd class="text-sm text-body">{SITE.companyTh}</dd>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <Icon name="map-pin" size={20} class="mt-0.5 shrink-0 text-green-600" />
+          <div>
+            <dt class="text-sm font-medium text-muted">
+              {t.aboutPage.facts.location}
+            </dt>
+            <dd class="mt-0.5 leading-relaxed text-text">{address}</dd>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <Icon name="mail" size={20} class="mt-0.5 shrink-0 text-green-600" />
+          <div>
+            <dt class="text-sm font-medium text-muted">
+              {t.aboutPage.facts.email}
+            </dt>
+            <dd class="mt-0.5">
+              <a
+                href={`mailto:${SITE.email}`}
+                class="font-medium text-green-700 hover:underline"
+              >
+                {SITE.email}
+              </a>
+            </dd>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <Icon name="phone" size={20} class="mt-0.5 shrink-0 text-green-600" />
+          <div>
+            <dt class="text-sm font-medium text-muted">
+              {t.aboutPage.facts.phone}
+            </dt>
+            <dd class="mt-0.5">
+              <a
+                href={`tel:${SITE.phoneIntl}`}
+                class="font-medium text-green-700 hover:underline"
+              >
+                {SITE.phone}
+              </a>
+            </dd>
+          </div>
+        </div>
+      </dl>
+      <div class="mt-8 border-t border-border pt-6">
+        <Button href={contactHref} variant="gradient">{t.cta.getInTouch}</Button>
+      </div>
+    </div>
+  </div>
+</Section>

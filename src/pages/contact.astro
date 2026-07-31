@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactBody from '../components/sections/ContactBody.astro';
+import { useTranslations } from '../i18n/utils';
+const lang = 'en';
+const t = useTranslations(lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={t.seo.contact.title}
+  description={t.seo.contact.desc}
+  canonicalPath="/contact"
+>
+  <ContactBody lang={lang} />
+</BaseLayout>

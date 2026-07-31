@@ -1,0 +1,60 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'gradient' | 'outline' | 'ghost';
+  size?: 'md' | 'lg';
+  icon?: string;
+  class?: string;
+  type?: 'button' | 'submit';
+  id?: string;
+}
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  icon = 'arrow-right',
+  class: className = '',
+  type = 'button',
+  id,
+} = Astro.props;
+
+const base =
+  'group inline-flex items-center justify-center gap-2 font-semibold rounded-full transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 whitespace-nowrap';
+
+const sizes: Record<string, string> = {
+  md: 'text-[0.95rem] px-5 py-2.5',
+  lg: 'text-base px-7 py-3.5',
+};
+
+const variants: Record<string, string> = {
+  primary:
+    'bg-green-600 text-white shadow-[0_10px_30px_-12px_rgba(23,133,58,0.7)] hover:bg-green-700 hover:-translate-y-0.5',
+  gradient:
+    'bg-brand-gradient text-white shadow-[0_16px_40px_-16px_rgba(34,163,69,0.75)] hover:-translate-y-0.5 hover:brightness-[1.04]',
+  outline:
+    'border border-border bg-white text-text hover:border-green-300 hover:bg-green-50 hover:-translate-y-0.5',
+  ghost: 'text-green-700 hover:bg-green-50',
+};
+
+const cls = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  class={cls}
+  id={id}
+  {...href ? { href } : { type }}
+>
+  <slot />
+  {
+    icon && (
+      <Icon
+        name={icon}
+        size={18}
+        class="transition-transform duration-200 group-hover:translate-x-0.5"
+      />
+    )
+  }
+</Tag>

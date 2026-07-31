@@ -1,0 +1,307 @@
+---
+import type { Lang } from '../../i18n/utils';
+import { useTranslations } from '../../i18n/utils';
+import { SITE, WEB3FORMS_ACCESS_KEY } from '../../config';
+import Icon from '../Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const f = t.contactPage.form;
+const d = t.contactPage.details;
+
+const address = lang === 'th' ? SITE.addressTh : SITE.addressEn;
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  SITE.addressEn
+)}`;
+
+const inputBase =
+  'w-full rounded-xl border border-border bg-white px-4 py-3 text-body outline-none transition-colors placeholder:text-muted/70 focus:border-green-400 focus:ring-4 focus:ring-green-100';
+const labelBase = 'mb-1.5 block text-sm font-medium text-text';
+---
+
+<section class="relative overflow-hidden border-b border-border bg-surface-soft">
+  <div
+    class="pointer-events-none absolute -right-24 -top-28 h-96 w-96 rounded-full bg-lime-400/20 blur-[110px]"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="container-page py-16 md:py-20">
+    <div class="reveal is-visible mx-auto max-w-3xl text-center">
+      <span class="eyebrow justify-center">{t.contactPage.eyebrow}</span>
+      <h1 class="mt-4 text-4xl md:text-5xl">{t.contactPage.title}</h1>
+      <p class="mt-5 text-lg text-body">{t.contactPage.subtitle}</p>
+    </div>
+  </div>
+</section>
+
+<section class="bg-surface">
+  <div class="container-page py-16 md:py-20">
+    <div class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+      <!-- Form -->
+      <div
+        class="rounded-3xl border border-border bg-white p-7 shadow-soft md:p-9"
+      >
+        <form
+          id="contact-form"
+          data-access-key={WEB3FORMS_ACCESS_KEY}
+          data-email={SITE.email}
+          novalidate
+        >
+          <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+          <input
+            type="hidden"
+            name="subject"
+            value="New enquiry from leafsp.com"
+          />
+          <input type="hidden" name="from_name" value="leafsp.com" />
+          <!-- honeypot -->
+          <input
+            type="checkbox"
+            name="botcheck"
+            class="hidden"
+            style="display:none"
+            tabindex="-1"
+            autocomplete="off"
+          />
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label class={labelBase} for="cf-name">{f.name}</label>
+              <input
+                class={inputBase}
+                id="cf-name"
+                name="name"
+                type="text"
+                required
+                autocomplete="name"
+              />
+            </div>
+            <div>
+              <label class={labelBase} for="cf-email">{f.email}</label>
+              <input
+                class={inputBase}
+                id="cf-email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+              />
+            </div>
+            <div>
+              <label class={labelBase} for="cf-company">
+                {f.company}
+                <span class="font-normal text-muted">({f.optional})</span>
+              </label>
+              <input
+                class={inputBase}
+                id="cf-company"
+                name="company"
+                type="text"
+                autocomplete="organization"
+              />
+            </div>
+            <div>
+              <label class={labelBase} for="cf-phone">
+                {f.phone}
+                <span class="font-normal text-muted">({f.optional})</span>
+              </label>
+              <input
+                class={inputBase}
+                id="cf-phone"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+              />
+            </div>
+          </div>
+          <div class="mt-5">
+            <label class={labelBase} for="cf-message">{f.message}</label>
+            <textarea
+              class={`${inputBase} min-h-[9rem] resize-y`}
+              id="cf-message"
+              name="message"
+              required
+              placeholder={f.messagePlaceholder}></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-gradient px-7 py-3.5 text-base font-semibold text-white shadow-[0_16px_40px_-16px_rgba(34,163,69,0.75)] transition-all duration-200 hover:-translate-y-0.5 hover:brightness-[1.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+            data-submit
+          >
+            <span data-label>{t.cta.sendMessage}</span>
+            <Icon
+              name="arrow-right"
+              size={18}
+              class="transition-transform duration-200 group-hover:translate-x-0.5"
+            />
+          </button>
+
+          <!-- status -->
+          <p
+            data-status="success"
+            class="mt-4 hidden items-start gap-2 rounded-xl bg-green-50 px-4 py-3 text-sm text-green-800"
+          >
+            <Icon name="check" size={18} class="mt-0.5 shrink-0 text-green-600" />
+            <span>{f.success}</span>
+          </p>
+          <p
+            data-status="error"
+            class="mt-4 hidden items-start gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
+          >
+            <span>
+              {f.error}
+              <a
+                href={`mailto:${SITE.email}`}
+                class="font-semibold underline">{SITE.email}</a
+              >.
+            </span>
+          </p>
+        </form>
+      </div>
+
+      <!-- Direct details -->
+      <div class="rounded-3xl border border-border bg-surface-tint p-7 md:p-9">
+        <h2 class="text-xl font-semibold text-text">{d.title}</h2>
+        <ul class="mt-6 space-y-6">
+          <li class="flex gap-4">
+            <span
+              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-green-600 shadow-soft"
+            >
+              <Icon name="mail" size={20} />
+            </span>
+            <div>
+              <div class="text-sm font-medium text-muted">{d.email}</div>
+              <a
+                href={`mailto:${SITE.email}`}
+                class="font-medium text-text hover:text-green-700"
+              >
+                {SITE.email}
+              </a>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span
+              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-green-600 shadow-soft"
+            >
+              <Icon name="phone" size={20} />
+            </span>
+            <div>
+              <div class="text-sm font-medium text-muted">{d.phone}</div>
+              <a
+                href={`tel:${SITE.phoneIntl}`}
+                class="font-medium text-text hover:text-green-700"
+              >
+                {SITE.phone}
+              </a>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span
+              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-green-600 shadow-soft"
+            >
+              <Icon name="map-pin" size={20} />
+            </span>
+            <div>
+              <div class="text-sm font-medium text-muted">{d.office}</div>
+              <p class="leading-relaxed text-text">{address}</p>
+              <a
+                href={mapsUrl}
+                target="_blank"
+                rel="noopener"
+                class="mt-1 inline-flex items-center gap-1 text-sm font-medium text-green-700 hover:underline"
+              >
+                Google Maps
+                <Icon name="arrow-up-right" size={14} />
+              </a>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span
+              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-green-600 shadow-soft"
+            >
+              <Icon name="clock" size={20} />
+            </span>
+            <div>
+              <div class="text-sm font-medium text-muted">{d.hours}</div>
+              <p class="font-medium text-text">{d.hoursValue}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  if (form) {
+    const btn = form.querySelector('[data-submit]') as HTMLButtonElement;
+    const label = form.querySelector('[data-label]') as HTMLElement;
+    const ok = form.querySelector('[data-status="success"]') as HTMLElement;
+    const err = form.querySelector('[data-status="error"]') as HTMLElement;
+    const sendingText = { th: 'กำลังส่ง…', en: 'Sending…' };
+    const isTh = document.documentElement.lang === 'th';
+    const key = form.getAttribute('data-access-key') || '';
+    const email = form.getAttribute('data-email') || '';
+
+    const show = (el: HTMLElement) => el.classList.replace('hidden', 'flex');
+    const hide = (el: HTMLElement) => el.classList.replace('flex', 'hidden');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hide(ok);
+      hide(err);
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const data = new FormData(form);
+      // honeypot
+      if (data.get('botcheck')) return;
+
+      // Fallback: if the Web3Forms key hasn't been configured yet,
+      // open the visitor's email client with a pre-filled message.
+      if (!key || key === 'YOUR_ACCESS_KEY') {
+        const body =
+          `Name: ${data.get('name')}\n` +
+          `Email: ${data.get('email')}\n` +
+          `Company: ${data.get('company') || '-'}\n` +
+          `Phone: ${data.get('phone') || '-'}\n\n` +
+          `${data.get('message')}`;
+        window.location.href =
+          `mailto:${email}?subject=${encodeURIComponent(
+            'Enquiry from leafsp.com'
+          )}&body=${encodeURIComponent(body)}`;
+        show(ok);
+        form.reset();
+        return;
+      }
+
+      btn.disabled = true;
+      label.textContent = isTh ? sendingText.th : sendingText.en;
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: data,
+        });
+        const json = await res.json();
+        if (json.success) {
+          show(ok);
+          form.reset();
+        } else {
+          show(err);
+        }
+      } catch {
+        show(err);
+      } finally {
+        btn.disabled = false;
+        label.textContent = isTh ? 'ส่งข้อความ' : 'Send message';
+      }
+    });
+  }
+</script>

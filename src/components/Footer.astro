@@ -1,0 +1,112 @@
+---
+import type { Lang } from '../i18n/utils';
+import { localizePath, useTranslations } from '../i18n/utils';
+import { NAV_ITEMS, ROUTES, SERVICES, SITE } from '../config';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const year = 2026;
+const address = lang === 'th' ? SITE.addressTh : SITE.addressEn;
+const companyName = lang === 'th' ? SITE.companyTh : SITE.companyEn;
+const servicesHref = localizePath(ROUTES.services, lang);
+---
+
+<footer class="bg-ink text-[#c7d4cd]">
+  <div class="container-page py-14 md:py-16">
+    <div class="grid gap-10 md:grid-cols-12">
+      <!-- Brand -->
+      <div class="md:col-span-4">
+        <div class="inline-flex rounded-lg bg-white/[0.03] p-1">
+          <Logo class="h-8 w-auto" />
+        </div>
+        <p class="mt-4 max-w-xs text-sm leading-relaxed text-[#9fb2a8]">
+          {t.footer.tagline}
+        </p>
+        <div class="mt-5 flex flex-col gap-2 text-sm">
+          <a
+            href={`mailto:${SITE.email}`}
+            class="inline-flex items-center gap-2.5 text-[#c7d4cd] transition-colors hover:text-lime-400"
+          >
+            <Icon name="mail" size={17} class="text-green-400" />
+            {SITE.email}
+          </a>
+          <a
+            href={`tel:${SITE.phoneIntl}`}
+            class="inline-flex items-center gap-2.5 text-[#c7d4cd] transition-colors hover:text-lime-400"
+          >
+            <Icon name="phone" size={17} class="text-green-400" />
+            {SITE.phone}
+          </a>
+        </div>
+      </div>
+
+      <!-- Company nav -->
+      <div class="md:col-span-2">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-[#7f948a]">
+          {t.footer.company}
+        </h3>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {
+            NAV_ITEMS.map((key) => (
+              <li>
+                <a
+                  href={localizePath(ROUTES[key], lang)}
+                  class="text-[#c7d4cd] transition-colors hover:text-lime-400"
+                >
+                  {t.nav[key]}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Services -->
+      <div class="md:col-span-3">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-[#7f948a]">
+          {t.footer.services}
+        </h3>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {
+            SERVICES.map((s) => (
+              <li>
+                <a
+                  href={servicesHref + '#' + s.key}
+                  class="text-[#c7d4cd] transition-colors hover:text-lime-400"
+                >
+                  {t.services[s.key].title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Contact / address -->
+      <div class="md:col-span-3">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-[#7f948a]">
+          {t.footer.contact}
+        </h3>
+        <p
+          class="mt-4 flex items-start gap-2.5 text-sm leading-relaxed text-[#9fb2a8]"
+        >
+          <Icon name="map-pin" size={17} class="mt-0.5 shrink-0 text-green-400" />
+          <span>{address}</span>
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="mt-12 flex flex-col gap-2 border-t border-ink-line pt-6 text-xs text-[#7f948a] md:flex-row md:items-center md:justify-between"
+    >
+      <p>{companyName}</p>
+      <p>© {year} {SITE.companyEn}. {t.footer.rights}</p>
+    </div>
+  </div>
+</footer>

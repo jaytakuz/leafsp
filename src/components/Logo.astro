@@ -1,0 +1,21 @@
+---
+import { SITE } from '../config';
+
+interface Props {
+  variant?: 'lockup' | 'mark';
+  class?: string;
+}
+const { variant = 'lockup', class: className = '' } = Astro.props;
+
+const src = variant === 'mark' ? '/logo-mark.png' : '/logo-lockup.svg';
+const alt = SITE.companyEn;
+---
+
+<img
+  src={src}
+  alt={alt}
+  class={className}
+  width={variant === 'mark' ? 40 : 132}
+  height={variant === 'mark' ? 40 : 29}
+  decoding="async"
+/>
