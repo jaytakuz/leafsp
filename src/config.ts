@@ -48,6 +48,39 @@ export const SERVICES = [
 
 export type ServiceKey = (typeof SERVICES)[number]['key'];
 
+/**
+ * Decision tree behind the contact-page project picker: visitors pick a
+ * service pillar, then a narrower option from that pillar's branch, so the
+ * enquiry arrives already categorised instead of as free text.
+ * Labels are resolved from i18n (`projectPicker.*`) by these keys.
+ */
+export const PROJECT_TREE = {
+  software: ['web', 'mobile', 'internal', 'ecommerce', 'website', 'integration'],
+  uxui: ['newDesign', 'redesign', 'designSystem', 'research'],
+  ai: ['chatbot', 'dataPlatform', 'automation', 'iot'],
+  qa: ['testing', 'testAutomation', 'security', 'performance'],
+  media: ['video', 'brand', 'shooting', 'content'],
+  consulting: ['advisory', 'architecture', 'training', 'transformation'],
+} as const satisfies Record<ServiceKey, readonly string[]>;
+
+/** How far along the visitor already is. */
+export const PROJECT_STAGES = [
+  'idea',
+  'spec',
+  'design',
+  'existing',
+  'rescue',
+] as const;
+
+/** Desired delivery window. */
+export const PROJECT_TIMELINES = [
+  'urgent',
+  'short',
+  'medium',
+  'long',
+  'flexible',
+] as const;
+
 /** Ordered "why LEAF" value props (keys resolved in i18n). */
 export const VALUES = ['endToEnd', 'modern', 'secure', 'partnership'] as const;
 

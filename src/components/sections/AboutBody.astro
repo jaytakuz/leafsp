@@ -23,7 +23,6 @@ const valueIcons: Record<string, string> = {
 };
 
 const address = lang === 'th' ? SITE.addressTh : SITE.addressEn;
-const city = lang === 'th' ? SITE.cityTh : SITE.city;
 ---
 
 <!-- Hero -->
@@ -54,17 +53,8 @@ const city = lang === 'th' ? SITE.cityTh : SITE.city;
             aria-hidden="true"
           >
           </div>
-          <div class="relative flex flex-col items-center text-center">
-            <div class="rounded-2xl bg-white/[0.04] p-5">
-              <Logo variant="mark" class="h-20 w-20" />
-            </div>
-            <p
-              class="mt-6 text-xl font-semibold text-white"
-              style="font-family:var(--font-display)"
-            >
-              {SITE.shortName}
-            </p>
-            <p class="mt-1 text-sm text-[#9fb2a8]">{city}</p>
+          <div class="relative flex items-center justify-center py-4">
+            <Logo variant="mark" class="h-28 w-auto md:h-32" />
           </div>
         </div>
       </div>

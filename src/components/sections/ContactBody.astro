@@ -3,6 +3,7 @@ import type { Lang } from '../../i18n/utils';
 import { useTranslations } from '../../i18n/utils';
 import { SITE, WEB3FORMS_ACCESS_KEY } from '../../config';
 import Icon from '../Icon.astro';
+import ProjectPicker from '../ProjectPicker.astro';
 
 interface Props {
   lang: Lang;
@@ -67,6 +68,10 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
             autocomplete="off"
           />
 
+          <ProjectPicker lang={lang} />
+
+          <hr class="mb-8 border-border" />
+
           <div class="grid gap-5 sm:grid-cols-2">
             <div>
               <label class={labelBase} for="cf-name">{f.name}</label>
@@ -118,12 +123,14 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
             </div>
           </div>
           <div class="mt-5">
-            <label class={labelBase} for="cf-message">{f.message}</label>
+            <label class={labelBase} for="cf-message">
+              {f.message}
+              <span class="font-normal text-muted">({f.optional})</span>
+            </label>
             <textarea
-              class={`${inputBase} min-h-[9rem] resize-y`}
+              class={`${inputBase} min-h-[6rem] resize-y`}
               id="cf-message"
               name="message"
-              required
               placeholder={f.messagePlaceholder}></textarea>
           </div>
 
@@ -271,7 +278,11 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
           `Email: ${data.get('email')}\n` +
           `Company: ${data.get('company') || '-'}\n` +
           `Phone: ${data.get('phone') || '-'}\n\n` +
-          `${data.get('message')}`;
+          `Project type: ${data.get('projectType') || '-'}\n` +
+          `Detail: ${data.get('projectDetail') || '-'}\n` +
+          `Stage: ${data.get('projectStage') || '-'}\n` +
+          `Timeline: ${data.get('projectTimeline') || '-'}\n\n` +
+          `${data.get('message') || '-'}`;
         window.location.href =
           `mailto:${email}?subject=${encodeURIComponent(
             'Enquiry from leafsp.com'

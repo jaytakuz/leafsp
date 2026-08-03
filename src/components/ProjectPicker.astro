@@ -1,0 +1,228 @@
+---
+/**
+ * Contact-page decision tree. The visitor narrows their enquiry by picking
+ * options instead of writing prose, so submissions arrive pre-categorised.
+ *
+ * Built from real radio inputs: it validates, is keyboard-navigable, and
+ * without JavaScript every step is simply visible at once. The progressive
+ * reveal is an enhancement layered on top by the inline script below.
+ */
+import type { Lang } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+import {
+  PROJECT_STAGES,
+  PROJECT_TIMELINES,
+  PROJECT_TREE,
+  SERVICES,
+} from '../config';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const p = t.contactPage.picker;
+// The per-branch label tables all have the same shape; index them loosely
+// so the tree in config.ts stays the single source of truth for the keys.
+const detailLabels = p.detail as Record<string, Record<string, string>>;
+
+const stepLegend =
+  'mb-3 flex items-center gap-2.5 text-base font-semibold text-text';
+const stepNum =
+  'inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-green-100 text-[0.75rem] font-bold text-green-700';
+// Radio is visually hidden; the sibling <span> carries the pressed styling.
+const chip =
+  'flex cursor-pointer items-center gap-2 rounded-full border border-border bg-white px-4 py-2 text-sm text-body transition-colors hover:border-green-300 hover:text-text peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:font-semibold peer-checked:text-green-800 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-green-600';
+const card =
+  'flex h-full cursor-pointer flex-col gap-2 rounded-2xl border border-border bg-white p-4 text-left transition-all hover:-translate-y-0.5 hover:border-green-300 hover:shadow-soft peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:shadow-soft peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-green-600';
+---
+
+<div id="project-picker" class="mb-8">
+  <h2 class="text-xl font-semibold text-text">{p.title}</h2>
+  <p class="mt-1 text-sm text-muted">{p.subtitle}</p>
+
+  <!-- Step 1 — service pillar -->
+  <fieldset class="mt-6" data-picker-step="type">
+    <legend class={stepLegend}>
+      <span class={stepNum}>1</span>
+      {p.steps.type}
+    </legend>
+    <div class="grid gap-3 sm:grid-cols-2">
+      {
+        SERVICES.map((s) => (
+          <label class="relative">
+            <input
+              class="peer absolute inset-0 h-full w-full cursor-pointer appearance-none opacity-0"
+              type="radio"
+              name="projectType"
+              value={t.services[s.key].title}
+              data-key={s.key}
+              required
+            />
+            <span class={card}>
+              <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-green-50 text-green-600">
+                <Icon name={s.icon} size={18} />
+              </span>
+              <span class="text-sm font-semibold text-text">
+                {t.services[s.key].title}
+              </span>
+            </span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <!-- Step 2 — branch of the tree chosen above -->
+  <fieldset class="mt-7" data-picker-step="detail">
+    <legend class={stepLegend}>
+      <span class={stepNum}>2</span>
+      {p.steps.detail}
+    </legend>
+    {
+      Object.entries(PROJECT_TREE).map(([branch, options]) => (
+        <div class="flex flex-wrap gap-2.5" data-branch={branch}>
+          {options.map((opt) => (
+            <label class="relative">
+              <input
+                class="peer absolute inset-0 h-full w-full cursor-pointer appearance-none opacity-0"
+                type="radio"
+                name="projectDetail"
+                value={detailLabels[branch][opt]}
+                required
+              />
+              <span class={chip}>{detailLabels[branch][opt]}</span>
+            </label>
+          ))}
+        </div>
+      ))
+    }
+  </fieldset>
+
+  <!-- Step 3 — current stage -->
+  <fieldset class="mt-7" data-picker-step="stage">
+    <legend class={stepLegend}>
+      <span class={stepNum}>3</span>
+      {p.steps.stage}
+    </legend>
+    <div class="flex flex-wrap gap-2.5">
+      {
+        PROJECT_STAGES.map((s) => (
+          <label class="relative">
+            <input
+              class="peer absolute inset-0 h-full w-full cursor-pointer appearance-none opacity-0"
+              type="radio"
+              name="projectStage"
+              value={p.stage[s]}
+              required
+            />
+            <span class={chip}>{p.stage[s]}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <!-- Step 4 — timeline -->
+  <fieldset class="mt-7" data-picker-step="timeline">
+    <legend class={stepLegend}>
+      <span class={stepNum}>4</span>
+      {p.steps.timeline}
+    </legend>
+    <div class="flex flex-wrap gap-2.5">
+      {
+        PROJECT_TIMELINES.map((tl) => (
+          <label class="relative">
+            <input
+              class="peer absolute inset-0 h-full w-full cursor-pointer appearance-none opacity-0"
+              type="radio"
+              name="projectTimeline"
+              value={p.timeline[tl]}
+              required
+            />
+            <span class={chip}>{p.timeline[tl]}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+</div>
+
+<style>
+  /* Toggled by the script below; kept in CSS so `display` beats utility classes. */
+  .picker-locked {
+    display: none;
+  }
+</style>
+
+<!--
+  Inline (not bundled) so it runs while the markup is still parsing — the
+  later steps are collapsed before the browser paints, avoiding a flash of
+  the fully-expanded form. With JS disabled nothing here runs and every
+  step stays visible and enabled.
+-->
+<script is:inline>
+  (function () {
+    var root = document.getElementById('project-picker');
+    if (!root) return;
+
+    var steps = ['type', 'detail', 'stage', 'timeline'].map(function (n) {
+      return root.querySelector('[data-picker-step="' + n + '"]');
+    });
+    var branches = root.querySelectorAll('[data-branch]');
+
+    // A locked step is hidden *and* disabled: a hidden required radio would
+    // otherwise make the form unsubmittable with an unfocusable control.
+    function setLocked(el, locked, keepChecked) {
+      if (!el) return;
+      el.classList.toggle('picker-locked', locked);
+      el.querySelectorAll('input[type="radio"]').forEach(function (r) {
+        r.disabled = locked;
+        if (locked && !keepChecked) r.checked = false;
+      });
+    }
+
+    function currentBranch() {
+      var picked = root.querySelector('input[name="projectType"]:checked');
+      return picked ? picked.getAttribute('data-key') : null;
+    }
+
+    function answered(name) {
+      return !!root.querySelector('input[name="' + name + '"]:checked');
+    }
+
+    function sync() {
+      var branch = currentBranch();
+
+      // Step 2 shows only the branch belonging to the chosen pillar.
+      setLocked(steps[1], !branch);
+      branches.forEach(function (g) {
+        var match = g.getAttribute('data-branch') === branch;
+        g.classList.toggle('picker-locked', !match);
+        g.querySelectorAll('input[type="radio"]').forEach(function (r) {
+          r.disabled = !match || !branch;
+          if (!match) r.checked = false;
+        });
+      });
+
+      setLocked(steps[2], !answered('projectDetail'));
+      setLocked(steps[3], !answered('projectStage'));
+    }
+
+    root.addEventListener('change', function (e) {
+      var name = e.target && e.target.name;
+      if (name === 'projectType' || name === 'projectDetail' || name === 'projectStage') {
+        sync();
+        // Bring the newly revealed step into view without yanking the page.
+        var next =
+          name === 'projectType' ? steps[1] : name === 'projectDetail' ? steps[2] : steps[3];
+        if (next && !next.classList.contains('picker-locked')) {
+          next.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    });
+
+    sync();
+  })();
+</script>
