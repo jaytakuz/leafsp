@@ -10,8 +10,8 @@ const { lang, class: className = '' } = Astro.props;
 
 const canonical = stripLocale(Astro.url.pathname);
 const options: { code: Lang; label: string }[] = [
-  { code: 'en', label: 'EN' },
   { code: 'th', label: 'ไทย' },
+  { code: 'en', label: 'EN' },
 ];
 ---
 

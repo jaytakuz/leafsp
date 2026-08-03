@@ -18,3 +18,5 @@ yarn-error.log*
 # editor
 .vscode/
 .idea/
+docs
+CLAUDE.md

@@ -6,10 +6,10 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://leafsp.com',
-  // English is served at the root (/), Thai under /th/
+  // Thai is served at the root (/), English under /en/
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'th'],
+    defaultLocale: 'th',
+    locales: ['th', 'en'],
     routing: {
       prefixDefaultLocale: false,
     },
@@ -17,8 +17,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       i18n: {
-        defaultLocale: 'en',
-        locales: { en: 'en', th: 'th' },
+        defaultLocale: 'th',
+        locales: { th: 'th', en: 'en' },
       },
     }),
   ],

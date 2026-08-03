@@ -1,13 +1,13 @@
 import { ui } from './ui';
 
-export const LANGUAGES = { en: 'English', th: 'ไทย' } as const;
-export const DEFAULT_LANG: Lang = 'en';
+export const LANGUAGES = { th: 'ไทย', en: 'English' } as const;
+export const DEFAULT_LANG: Lang = 'th';
 export type Lang = keyof typeof ui; // 'en' | 'th'
 
 /** Detect the active language from the request URL. */
 export function getLangFromUrl(url: URL): Lang {
   const seg = url.pathname.split('/')[1];
-  return seg === 'th' ? 'th' : 'en';
+  return seg === 'en' ? 'en' : 'th';
 }
 
 /** Return the full string table for a language. */
@@ -16,21 +16,21 @@ export function useTranslations(lang: Lang) {
 }
 
 /**
- * Localize a canonical (English) path for the given language.
- * en: '/services' -> '/services'  |  th: '/services' -> '/th/services'
- * Root is handled specially so Thai lands on '/th/'.
+ * Localize a canonical (unprefixed, Thai) path for the given language.
+ * th: '/services' -> '/services'  |  en: '/services' -> '/en/services'
+ * Root is handled specially so English lands on '/en/'.
  */
 export function localizePath(path: string, lang: Lang): string {
   const clean = path === '' ? '/' : path;
-  if (lang === 'en') return clean;
-  if (clean === '/') return '/th/';
-  return `/th${clean}`;
+  if (lang === 'th') return clean;
+  if (clean === '/') return '/en/';
+  return `/en${clean}`;
 }
 
-/** Strip any locale prefix, returning the canonical (English) path. */
+/** Strip any locale prefix, returning the canonical (Thai) path. */
 export function stripLocale(pathname: string): string {
-  if (pathname === '/th' || pathname === '/th/') return '/';
-  if (pathname.startsWith('/th/')) return pathname.slice(3);
+  if (pathname === '/en' || pathname === '/en/') return '/';
+  if (pathname.startsWith('/en/')) return pathname.slice(3);
   return pathname || '/';
 }
 

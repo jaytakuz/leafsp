@@ -33,7 +33,7 @@ npm run dev      # start the dev server at http://localhost:4321
 ```
 
 | Command | Action |
-|---|---|
+|---|---|npm install | Install dependencies |
 | `npm run dev` | Start the local dev server |
 | `npm run build` | Build the production site into `dist/` |
 | `npm run preview` | Preview the production build locally |
@@ -54,8 +54,8 @@ src/
 │   ├── Button.astro / Section.astro / ServiceCard.astro / Icon.astro / Logo.astro
 │   └── sections/          # Page bodies: HomeBody, ServicesBody, AboutBody, ContactBody
 ├── pages/
-│   ├── index.astro services.astro about.astro contact.astro 404.astro   (English, at /)
-│   └── th/…               # Thai mirror, served at /th/
+│   ├── index.astro services.astro about.astro contact.astro 404.astro   (Thai, at /)
+│   └── en/…               # English mirror, served at /en/
 └── styles/global.css      # Design tokens (colors, fonts, spacing, shadows)
 public/                    # Logos, favicons, og-image, robots.txt, .htaccess, manifest
 ```
@@ -76,7 +76,7 @@ public/                    # Logos, favicons, og-image, robots.txt, .htaccess, m
 
 1. Add the route to `ROUTES` and (optionally) `NAV_ITEMS` in `src/config.ts`.
 2. Add its copy to `src/i18n/ui.ts`.
-3. Create `src/pages/<name>.astro` and `src/pages/th/<name>.astro`.
+3. Create `src/pages/<name>.astro` (Thai) and `src/pages/en/<name>.astro`.
 
 ---
 

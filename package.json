@@ -11,12 +11,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.4.0",
+    "@astrojs/sitemap": "^3.7.3",
     "@fontsource/ibm-plex-sans": "^5.1.0",
     "@fontsource/ibm-plex-sans-thai": "^5.1.0",
     "@fontsource/space-grotesk": "^5.1.0",
     "@tailwindcss/vite": "^4.1.11",
-    "astro": "^5.12.0",
+    "astro": "^7.1.6",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

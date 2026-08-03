@@ -22,7 +22,7 @@ interface Props {
   lang: Lang;
   title: string;
   description: string;
-  /** English canonical path, e.g. '/services'. Defaults from the URL. */
+  /** Canonical unprefixed (Thai) path, e.g. '/services'. Defaults from the URL. */
   canonicalPath?: string;
 }
 const { lang, title, description } = Astro.props;
@@ -75,7 +75,7 @@ const orgSchema = {
     <!-- Language alternates -->
     <link rel="alternate" hreflang="en" href={enUrl} />
     <link rel="alternate" hreflang="th" href={thUrl} />
-    <link rel="alternate" hreflang="x-default" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={thUrl} />
 
     <!-- Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
