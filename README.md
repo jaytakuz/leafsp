@@ -123,4 +123,11 @@ The same `dist/` output works on any static host with **zero code changes**:
 
 ---
 
+## Authors
+
+- [@jaytakuz](https://github.com/jaytakuz)
+- [@itsheroz](https://github.com/itsheroz)
+
+---
+
 © LEAF Software and Production Co., Ltd.
