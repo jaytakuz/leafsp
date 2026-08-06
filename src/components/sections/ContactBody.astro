@@ -48,7 +48,6 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
         <form
           id="contact-form"
           data-access-key={WEB3FORMS_ACCESS_KEY}
-          data-email={SITE.email}
           novalidate
         >
           <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
@@ -167,6 +166,38 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
               >.
             </span>
           </p>
+
+          <!--
+            Shown when the Web3Forms key hasn't been configured. The enquiry is
+            rendered here for the visitor to copy rather than pushed into a
+            mailto: URL — the Thai answers percent-encode to roughly nine
+            characters each, so a filled-in form already lands near the ~2048
+            character limit and any note would be silently truncated.
+          -->
+          <div
+            data-status="manual"
+            class="mt-4 hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+          >
+            <p class="font-semibold">{f.manualTitle}</p>
+            <p class="mt-1">
+              {f.manualHint}
+              <a
+                href={`mailto:${SITE.email}`}
+                class="font-semibold underline">{SITE.email}</a
+              >
+            </p>
+            <pre
+              data-manual-body
+              class="mt-3 max-h-56 overflow-auto whitespace-pre-wrap rounded-lg bg-white/70 p-3 text-[0.8rem] leading-relaxed text-text"></pre>
+            <button
+              type="button"
+              data-copy
+              data-copied={f.copied}
+              class="mt-3 inline-flex items-center gap-2 rounded-full border border-amber-300 bg-white px-4 py-2 text-sm font-semibold text-amber-900 transition-colors hover:bg-amber-100"
+            >
+              {f.copy}
+            </button>
+          </div>
         </form>
       </div>
 
@@ -250,18 +281,40 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
     const label = form.querySelector('[data-label]') as HTMLElement;
     const ok = form.querySelector('[data-status="success"]') as HTMLElement;
     const err = form.querySelector('[data-status="error"]') as HTMLElement;
+    const manual = form.querySelector('[data-status="manual"]') as HTMLElement;
+    const manualBody = form.querySelector('[data-manual-body]') as HTMLElement;
+    const copyBtn = form.querySelector('[data-copy]') as HTMLButtonElement;
     const sendingText = { th: 'กำลังส่ง…', en: 'Sending…' };
     const isTh = document.documentElement.lang === 'th';
     const key = form.getAttribute('data-access-key') || '';
-    const email = form.getAttribute('data-email') || '';
 
     const show = (el: HTMLElement) => el.classList.replace('hidden', 'flex');
     const hide = (el: HTMLElement) => el.classList.replace('flex', 'hidden');
+
+    copyBtn?.addEventListener('click', async () => {
+      const text = manualBody.textContent || '';
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        // clipboard API needs a secure context; select the text so Ctrl+C works
+        const range = document.createRange();
+        range.selectNodeContents(manualBody);
+        const sel = window.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+      }
+      const original = copyBtn.textContent;
+      copyBtn.textContent = copyBtn.getAttribute('data-copied');
+      setTimeout(() => {
+        copyBtn.textContent = original;
+      }, 2000);
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       hide(ok);
       hide(err);
+      manual.classList.add('hidden');
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
@@ -270,8 +323,9 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
       // honeypot
       if (data.get('botcheck')) return;
 
-      // Fallback: if the Web3Forms key hasn't been configured yet,
-      // open the visitor's email client with a pre-filled message.
+      // Fallback: the Web3Forms key hasn't been configured, so nothing can be
+      // sent. Show the enquiry for the visitor to copy and leave the form
+      // filled in — never report success for a message that didn't go out.
       if (!key || key === 'YOUR_ACCESS_KEY') {
         const body =
           `Name: ${data.get('name')}\n` +
@@ -283,12 +337,9 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
           `Stage: ${data.get('projectStage') || '-'}\n` +
           `Timeline: ${data.get('projectTimeline') || '-'}\n\n` +
           `${data.get('message') || '-'}`;
-        window.location.href =
-          `mailto:${email}?subject=${encodeURIComponent(
-            'Enquiry from leafsp.com'
-          )}&body=${encodeURIComponent(body)}`;
-        show(ok);
-        form.reset();
+        manualBody.textContent = body;
+        manual.classList.remove('hidden');
+        manual.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         return;
       }
 

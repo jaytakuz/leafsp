@@ -277,6 +277,11 @@ export const ui = {
           'Thank you! Your message is on its way — we’ll be in touch shortly.',
         error:
           'Something went wrong. Please try again, or email us directly at ',
+        manualTitle: 'Automatic sending isn’t set up yet',
+        manualHint:
+          'Nothing has been sent. Please copy the details below and email them to ',
+        copy: 'Copy details',
+        copied: 'Copied',
       },
       details: {
         title: 'Talk to us directly',
@@ -595,6 +600,11 @@ export const ui = {
         sending: 'กำลังส่ง…',
         success: 'ขอบคุณครับ/ค่ะ! เราได้รับข้อความของคุณแล้ว และจะติดต่อกลับโดยเร็ว',
         error: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง หรืออีเมลถึงเราโดยตรงที่ ',
+        manualTitle: 'ระบบส่งอัตโนมัติยังไม่พร้อมใช้งาน',
+        manualHint:
+          'ข้อมูลยังไม่ได้ถูกส่ง กรุณาคัดลอกรายละเอียดด้านล่างแล้วส่งอีเมลมาที่ ',
+        copy: 'คัดลอกข้อมูล',
+        copied: 'คัดลอกแล้ว',
       },
       details: {
         title: 'ติดต่อเราโดยตรง',
