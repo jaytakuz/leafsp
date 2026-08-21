@@ -3,7 +3,7 @@ import Icon from './Icon.astro';
 
 interface Props {
   href?: string;
-  variant?: 'primary' | 'gradient' | 'outline' | 'ghost';
+  variant?: 'primary' | 'gradient' | 'onDark' | 'outline' | 'ghost';
   size?: 'md' | 'lg';
   icon?: string;
   class?: string;
@@ -30,11 +30,16 @@ const sizes: Record<string, string> = {
 
 const variants: Record<string, string> = {
   primary:
-    'bg-green-600 text-white shadow-[0_10px_30px_-12px_rgba(23,133,58,0.7)] hover:bg-green-700 hover:-translate-y-0.5',
+    'bg-btn text-white shadow-[0_10px_30px_-12px_rgba(23,133,58,0.7)] hover:bg-btn-hover hover:-translate-y-0.5',
   gradient:
     'bg-brand-gradient text-white shadow-[0_16px_40px_-16px_rgba(34,163,69,0.75)] hover:-translate-y-0.5 hover:brightness-[1.04]',
+  // For use on the green/ink panels, where the brand gradient ends on the
+  // same green as the panel and the button loses its edge. Hover dims via
+  // brightness rather than a green tint, which would invert in dark mode.
+  onDark:
+    'bg-white text-ink shadow-[0_12px_30px_-14px_rgba(0,0,0,0.55)] hover:-translate-y-0.5 hover:brightness-95',
   outline:
-    'border border-border bg-white text-text hover:border-green-300 hover:bg-green-50 hover:-translate-y-0.5',
+    'border border-border bg-surface text-text hover:border-green-300 hover:bg-green-50 hover:-translate-y-0.5',
   ghost: 'text-green-700 hover:bg-green-50',
 };
 

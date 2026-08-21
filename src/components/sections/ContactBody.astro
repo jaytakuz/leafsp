@@ -1,7 +1,7 @@
 ---
 import type { Lang } from '../../i18n/utils';
 import { useTranslations } from '../../i18n/utils';
-import { SITE, WEB3FORMS_ACCESS_KEY } from '../../config';
+import { PHONE_COUNTRY_CODES, SITE, WEB3FORMS_ACCESS_KEY } from '../../config';
 import Icon from '../Icon.astro';
 import ProjectPicker from '../ProjectPicker.astro';
 
@@ -18,8 +18,13 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
   SITE.addressEn
 )}`;
 
-const inputBase =
-  'w-full rounded-xl border border-border bg-white px-4 py-3 text-body outline-none transition-colors placeholder:text-muted/70 focus:border-green-400 focus:ring-4 focus:ring-green-100';
+// Field chrome without a corner radius, so the phone group can split its
+// corners between the dial-code select and the number input.
+const fieldCore =
+  'border border-border bg-surface px-4 py-3 text-body outline-none transition-colors placeholder:text-muted/70 focus:border-green-400 focus:ring-4 focus:ring-green-100';
+const inputBase = `w-full rounded-xl ${fieldCore}`;
+const phoneCodeCls = `shrink-0 rounded-l-xl border-r-0 pr-2 ${fieldCore}`;
+const phoneNumCls = `w-full rounded-r-xl ${fieldCore}`;
 const labelBase = 'mb-1.5 block text-sm font-medium text-text';
 ---
 
@@ -43,7 +48,7 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
     <div class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
       <!-- Form -->
       <div
-        class="rounded-3xl border border-border bg-white p-7 shadow-soft md:p-9"
+        class="rounded-3xl border border-border bg-surface p-7 shadow-soft md:p-9"
       >
         <form
           id="contact-form"
@@ -112,13 +117,31 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
                 {f.phone}
                 <span class="font-normal text-muted">({f.optional})</span>
               </label>
-              <input
-                class={inputBase}
-                id="cf-phone"
-                name="phone"
-                type="tel"
-                autocomplete="tel"
-              />
+              <div class="flex">
+                <select
+                  class={phoneCodeCls}
+                  id="cf-phone-country"
+                  name="phoneCountry"
+                  aria-label={f.phoneCountry}
+                >
+                  {
+                    PHONE_COUNTRY_CODES.map((c) => (
+                      <option value={c.dial} selected={c.iso === 'TH'}>
+                        {c.iso} {c.dial}
+                      </option>
+                    ))
+                  }
+                </select>
+                <input
+                  class={phoneNumCls}
+                  id="cf-phone"
+                  name="phone"
+                  type="tel"
+                  inputmode="tel"
+                  autocomplete="tel"
+                  placeholder={f.phonePlaceholder}
+                />
+              </div>
             </div>
           </div>
           <div class="mt-5">
@@ -188,12 +211,12 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
             </p>
             <pre
               data-manual-body
-              class="mt-3 max-h-56 overflow-auto whitespace-pre-wrap rounded-lg bg-white/70 p-3 text-[0.8rem] leading-relaxed text-text"></pre>
+              class="mt-3 max-h-56 overflow-auto whitespace-pre-wrap rounded-lg bg-surface/70 p-3 text-[0.8rem] leading-relaxed text-text"></pre>
             <button
               type="button"
               data-copy
               data-copied={f.copied}
-              class="mt-3 inline-flex items-center gap-2 rounded-full border border-amber-300 bg-white px-4 py-2 text-sm font-semibold text-amber-900 transition-colors hover:bg-amber-100"
+              class="mt-3 inline-flex items-center gap-2 rounded-full border border-amber-300 bg-surface px-4 py-2 text-sm font-semibold text-amber-900 transition-colors hover:bg-amber-100"
             >
               {f.copy}
             </button>
@@ -207,7 +230,7 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
         <ul class="mt-6 space-y-6">
           <li class="flex gap-4">
             <span
-              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-green-600 shadow-soft"
+              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-surface text-green-600 shadow-soft"
             >
               <Icon name="mail" size={20} />
             </span>
@@ -223,7 +246,7 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
           </li>
           <li class="flex gap-4">
             <span
-              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-green-600 shadow-soft"
+              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-surface text-green-600 shadow-soft"
             >
               <Icon name="phone" size={20} />
             </span>
@@ -239,7 +262,7 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
           </li>
           <li class="flex gap-4">
             <span
-              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-green-600 shadow-soft"
+              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-surface text-green-600 shadow-soft"
             >
               <Icon name="map-pin" size={20} />
             </span>
@@ -259,7 +282,7 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
           </li>
           <li class="flex gap-4">
             <span
-              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-green-600 shadow-soft"
+              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-surface text-green-600 shadow-soft"
             >
               <Icon name="clock" size={20} />
             </span>
@@ -290,6 +313,75 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
 
     const show = (el: HTMLElement) => el.classList.replace('hidden', 'flex');
     const hide = (el: HTMLElement) => el.classList.replace('flex', 'hidden');
+
+    // --- Phone field: digits only, grouped as you type -------------------
+    const phoneInput = form.querySelector('#cf-phone') as HTMLInputElement | null;
+    const phoneCountry = form.querySelector(
+      '#cf-phone-country'
+    ) as HTMLSelectElement | null;
+
+    // Thai numbers read 081-234-5678 when the trunk zero is typed and
+    // 81 234 5678 when it isn't, so the grouping follows what's in the field.
+    const groupsFor = (dial: string, digits: string) =>
+      dial === '+66'
+        ? digits.startsWith('0')
+          ? [3, 3, 4]
+          : [2, 3, 4]
+        : dial === '+1'
+          ? [3, 3, 4]
+          : [3, 3, 3, 3];
+
+    const groupDigits = (digits: string, dial: string) => {
+      const parts: string[] = [];
+      let i = 0;
+      for (const size of groupsFor(dial, digits)) {
+        if (i >= digits.length) break;
+        parts.push(digits.slice(i, i + size));
+        i += size;
+      }
+      if (i < digits.length) parts.push(digits.slice(i));
+      return parts.join(' ');
+    };
+
+    const reformatPhone = () => {
+      if (!phoneInput) return;
+      const raw = phoneInput.value;
+      const dial = phoneCountry?.value || '';
+      const dialDigits = dial.replace(/\D/g, '');
+      let digits = raw.replace(/\D/g, '');
+
+      // Someone pasting a full international number: drop the country code so
+      // the field holds only the national part shown beside the select.
+      if (raw.trim().startsWith('+') && dialDigits && digits.startsWith(dialDigits)) {
+        digits = digits.slice(dialDigits.length);
+      }
+      // E.164 caps the whole number at 15 digits, and the dial code is not in
+      // this field, so budget for it here.
+      digits = digits.slice(0, Math.max(4, 15 - dialDigits.length));
+
+      // Count digits left of the caret so it can be restored to the same spot
+      // afterwards instead of jumping to the end of the field.
+      const caret = phoneInput.selectionStart ?? raw.length;
+      const digitsBeforeCaret = raw.slice(0, caret).replace(/\D/g, '').length;
+
+      const formatted = groupDigits(digits, dial);
+      if (formatted !== raw) {
+        phoneInput.value = formatted;
+        let pos = 0;
+        let seen = 0;
+        while (pos < formatted.length && seen < digitsBeforeCaret) {
+          if (formatted.charCodeAt(pos) >= 48 && formatted.charCodeAt(pos) <= 57) {
+            seen++;
+          }
+          pos++;
+        }
+        phoneInput.setSelectionRange(pos, pos);
+      }
+    };
+
+    phoneInput?.addEventListener('input', reformatPhone);
+    // Regroup when the country changes, e.g. +66 is 2-3-4 but +1 is 3-3-4.
+    phoneCountry?.addEventListener('change', reformatPhone);
 
     copyBtn?.addEventListener('click', async () => {
       const text = manualBody.textContent || '';
@@ -322,6 +414,22 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
       const data = new FormData(form);
       // honeypot
       if (data.get('botcheck')) return;
+
+      // Fold the dial code into the number as E.164. Thai numbers are written
+      // with a national trunk "0" that must come off first, so 081-234-5678
+      // under +66 becomes +66812345678, not +66081234567. A number the
+      // visitor already typed in full international form is left alone.
+      const dial = (data.get('phoneCountry') || '').toString();
+      const typed = (data.get('phone') || '').toString().trim();
+      data.delete('phoneCountry');
+      data.set(
+        'phone',
+        !typed
+          ? ''
+          : typed.startsWith('+')
+            ? '+' + typed.replace(/\D/g, '')
+            : dial + typed.replace(/\D/g, '').replace(/^0/, '')
+      );
 
       // Fallback: the Web3Forms key hasn't been configured, so nothing can be
       // sent. Show the enquiry for the visitor to copy and leave the form

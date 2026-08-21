@@ -63,6 +63,26 @@ export const PROJECT_TREE = {
   consulting: ['advisory', 'architecture', 'training', 'transformation'],
 } as const satisfies Record<ServiceKey, readonly string[]>;
 
+/**
+ * Dial codes offered beside the contact-form phone field. Thailand leads and
+ * is the default. Listed as ISO + dial rather than flag emoji, which Windows
+ * renders as bare letters.
+ */
+export const PHONE_COUNTRY_CODES = [
+  { iso: 'TH', dial: '+66' },
+  { iso: 'US', dial: '+1' },
+  { iso: 'GB', dial: '+44' },
+  { iso: 'SG', dial: '+65' },
+  { iso: 'MY', dial: '+60' },
+  { iso: 'JP', dial: '+81' },
+  { iso: 'CN', dial: '+86' },
+  { iso: 'KR', dial: '+82' },
+  { iso: 'AU', dial: '+61' },
+  { iso: 'DE', dial: '+49' },
+  { iso: 'FR', dial: '+33' },
+  { iso: 'IN', dial: '+91' },
+] as const;
+
 /** How far along the visitor already is. */
 export const PROJECT_STAGES = [
   'idea',

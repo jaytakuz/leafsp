@@ -1,0 +1,75 @@
+---
+/**
+ * Light/dark switch.
+ *
+ * Renders in the light position; the script below corrects it on load from
+ * whatever the inline head script already decided, so the markup never has to
+ * guess. The icon shows the mode a click will switch *to* — a moon while the
+ * page is light, a sun while it's dark.
+ */
+import type { Lang } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Lang;
+  class?: string;
+}
+const { lang, class: className = '' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  role="switch"
+  aria-checked="false"
+  aria-label={t.themeToggle}
+  title={t.themeToggle}
+  class={`group inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-border bg-surface text-text transition-colors hover:border-green-300 hover:text-green-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 ${className}`}
+>
+  <Icon name="moon" size={19} class="group-aria-checked:hidden" />
+  <Icon name="sun" size={19} class="hidden group-aria-checked:block" />
+</button>
+
+<script>
+  const KEY = 'leaf-theme';
+  const root = document.documentElement;
+  const toggles = document.querySelectorAll('[data-theme-toggle]');
+
+  const read = () => {
+    try {
+      return localStorage.getItem(KEY);
+    } catch {
+      return null;
+    }
+  };
+
+  const apply = (dark: boolean) => {
+    if (dark) root.setAttribute('data-theme', 'dark');
+    else root.removeAttribute('data-theme');
+    toggles.forEach((b) => b.setAttribute('aria-checked', String(dark)));
+  };
+
+  // The head script has already set the attribute; catch the button up to it.
+  apply(root.getAttribute('data-theme') === 'dark');
+
+  toggles.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const dark = root.getAttribute('data-theme') !== 'dark';
+      try {
+        localStorage.setItem(KEY, dark ? 'dark' : 'light');
+      } catch {
+        /* nothing to persist to; the choice still applies for this page */
+      }
+      apply(dark);
+    })
+  );
+
+  // Keep following the OS until the visitor picks a side themselves.
+  window
+    .matchMedia('(prefers-color-scheme: dark)')
+    .addEventListener('change', (e) => {
+      if (!read()) apply(e.matches);
+    });
+</script>
