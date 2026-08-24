@@ -82,6 +82,8 @@
       var(--color-green-500) 52%,
       var(--color-green-700) 100%
     );
+    /* Hero grid rule. Dark ink on a light page; the dark theme flips it. */
+    --grid-line: rgba(13, 31, 22, 0.04);
     color-scheme: light;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
@@ -98,6 +100,9 @@
   ----------------------------------------------------------------- */
   html[data-theme='dark'] {
     color-scheme: dark;
+
+    /* Light rule on a dark page — the light-mode ink is invisible here. */
+    --grid-line: rgba(233, 241, 236, 0.055);
 
     /* The page sits darkest so panels lift off it. */
     --color-surface: #0a1810;

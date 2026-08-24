@@ -221,7 +221,7 @@ const processIcons: Record<string, string> = {
   <div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
     {
       VALUES.map((key) => (
-        <div class="reveal">
+        <div class="reveal max-sm:text-center">
           <div
             class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600"
           >
@@ -254,15 +254,15 @@ const processIcons: Record<string, string> = {
     </div>
     {
       PROCESS.map((key, i) => (
-        <div class="reveal relative">
-          <div class="flex items-center gap-3">
+        <div class="reveal relative max-sm:text-center">
+          <div class="flex items-center gap-3 max-sm:justify-center">
             <span
               class="relative z-10 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-gradient text-white shadow-[0_10px_24px_-12px_rgba(34,163,69,0.8)]"
             >
               <Icon name={processIcons[key]} size={22} />
             </span>
             <span
-              class="text-sm font-bold text-green-700"
+              class="text-sm font-bold text-green-700 max-sm:hidden"
               style="font-family:var(--font-display)"
             >
               0{i + 1}
@@ -319,8 +319,8 @@ const processIcons: Record<string, string> = {
 <style>
   .hero-grid {
     background-image:
-      linear-gradient(to right, rgba(13, 31, 22, 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(13, 31, 22, 0.04) 1px, transparent 1px);
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
     background-size: 44px 44px;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 75%);
     -webkit-mask-image: radial-gradient(
