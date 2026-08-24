@@ -69,8 +69,8 @@ const contactHref = localizePath(ROUTES.contact, lang);
 
       <div class="flex items-center gap-2.5">
         <ThemeToggle lang={lang} />
-        <LanguageSwitcher lang={lang} class="hidden sm:inline-flex" />
-        <Button href={contactHref} size="md" class="hidden md:inline-flex">
+        <LanguageSwitcher lang={lang} class="max-sm:hidden" />
+        <Button href={contactHref} size="md" class="max-md:hidden">
           {t.cta.startProject}
         </Button>
 
@@ -118,7 +118,7 @@ const contactHref = localizePath(ROUTES.contact, lang);
         ))
       }
       <div class="mt-2 flex items-center justify-between gap-3 px-1">
-        <LanguageSwitcher lang={lang} />
+        <LanguageSwitcher lang={lang} class="sm:hidden" />
         <Button href={contactHref} class="flex-1">{t.cta.startProject}</Button>
       </div>
     </nav>
