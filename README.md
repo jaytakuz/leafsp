@@ -23,23 +23,6 @@ highly on performance.
 
 ---
 
-## Getting started (local development)
-
-Requires **Node.js 18+**.
-
-```bash
-npm install      # install dependencies
-npm run dev      # start the dev server at http://localhost:4321
-```
-
-| Command | Action |
-|---|---|npm install | Install dependencies |
-| `npm run dev` | Start the local dev server |
-| `npm run build` | Build the production site into `dist/` |
-| `npm run preview` | Preview the production build locally |
-
----
-
 ## Project structure
 
 ```
