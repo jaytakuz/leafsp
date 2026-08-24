@@ -82,6 +82,8 @@
       var(--color-green-500) 52%,
       var(--color-green-700) 100%
     );
+    /* Hero grid rule. Dark ink on a light page; the dark theme flips it. */
+    --grid-line: rgba(13, 31, 22, 0.04);
     color-scheme: light;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
@@ -98,6 +100,9 @@
   ----------------------------------------------------------------- */
   html[data-theme='dark'] {
     color-scheme: dark;
+
+    /* Light rule on a dark page — the light-mode ink is invisible here. */
+    --grid-line: rgba(233, 241, 236, 0.055);
 
     /* The page sits darkest so panels lift off it. */
     --color-surface: #0a1810;
@@ -238,6 +243,24 @@
     max-width: 52rem;
     margin-inline: auto;
     padding-inline: var(--spacing-gutter);
+  }
+
+  /* Faint ruled backdrop for page heroes. Sits behind content and fades out
+     downward, so it reads as texture rather than a table. */
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 75%);
+    -webkit-mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      #000 40%,
+      transparent 75%
+    );
   }
 
   .text-gradient {
