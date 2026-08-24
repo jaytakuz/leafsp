@@ -63,9 +63,26 @@ const orgSchema = {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <!-- Enables scroll-reveal only when JS is available (content stays visible otherwise) -->
+    <!--
+      Enables scroll-reveal only when JS is available (content stays visible
+      otherwise), and settles the theme before the first paint. This has to be
+      inline and in <head>: deferring it flashes a white page at anyone who
+      chose dark.
+    -->
     <script is:inline>
       document.documentElement.classList.add('js');
+      (function () {
+        try {
+          var saved = localStorage.getItem('leaf-theme');
+          var dark =
+            saved === 'dark' ||
+            (!saved &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+        } catch (e) {
+          /* private mode blocks localStorage; light is a fine default */
+        }
+      })();
     </script>
 
     <title>{title}</title>
@@ -113,7 +130,7 @@ const orgSchema = {
   <body>
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-green-600 focus:px-4 focus:py-2 focus:text-white"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2 focus:text-white"
     >
       Skip to content
     </a>

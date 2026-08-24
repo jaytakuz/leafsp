@@ -17,14 +17,12 @@ const companyName = lang === 'th' ? SITE.companyTh : SITE.companyEn;
 const servicesHref = localizePath(ROUTES.services, lang);
 ---
 
-<footer class="bg-ink text-[#c7d4cd]">
+<footer class="border-t border-ink-line bg-ink text-[#c7d4cd]">
   <div class="container-page py-14 md:py-16">
     <div class="grid gap-10 md:grid-cols-12">
       <!-- Brand -->
       <div class="md:col-span-4">
-        <div class="inline-flex rounded-lg bg-white/[0.03] p-1">
-          <Logo class="h-8 w-auto" />
-        </div>
+        <Logo class="h-8 w-auto" />
         <p class="mt-4 max-w-xs text-sm leading-relaxed text-[#9fb2a8]">
           {t.footer.tagline}
         </p>
@@ -48,7 +46,7 @@ const servicesHref = localizePath(ROUTES.services, lang);
 
       <!-- Company nav -->
       <div class="md:col-span-2">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-[#7f948a]">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-[#99b1a7]">
           {t.footer.company}
         </h3>
         <ul class="mt-4 space-y-2.5 text-sm">
@@ -69,7 +67,7 @@ const servicesHref = localizePath(ROUTES.services, lang);
 
       <!-- Services -->
       <div class="md:col-span-3">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-[#7f948a]">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-[#99b1a7]">
           {t.footer.services}
         </h3>
         <ul class="mt-4 space-y-2.5 text-sm">
@@ -90,7 +88,7 @@ const servicesHref = localizePath(ROUTES.services, lang);
 
       <!-- Contact / address -->
       <div class="md:col-span-3">
-        <h3 class="text-xs font-semibold uppercase tracking-wider text-[#7f948a]">
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-[#99b1a7]">
           {t.footer.contact}
         </h3>
         <p
@@ -103,7 +101,7 @@ const servicesHref = localizePath(ROUTES.services, lang);
     </div>
 
     <div
-      class="mt-12 flex flex-col gap-2 border-t border-ink-line pt-6 text-xs text-[#7f948a] md:flex-row md:items-center md:justify-between"
+      class="mt-12 flex flex-col gap-2 border-t border-ink-line pt-6 text-xs text-[#99b1a7] md:flex-row md:items-center md:justify-between"
     >
       <p>{companyName}</p>
       <p>© {year} {SITE.companyEn}. {t.footer.rights}</p>

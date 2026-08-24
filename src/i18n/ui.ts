@@ -8,6 +8,7 @@ export const ui = {
     langLabel: 'EN',
     switchTo: 'ไทย',
     switchToAria: 'เปลี่ยนเป็นภาษาไทย',
+    themeToggle: 'Switch between light and dark mode',
 
     nav: {
       home: 'Home',
@@ -271,6 +272,8 @@ export const ui = {
         phone: 'Phone',
         message: 'Anything else to add?',
         optional: 'optional',
+        phoneCountry: 'Country dialling code',
+        phonePlaceholder: '81 234 5678',
         messagePlaceholder: 'Only if you want to — everything above is enough to get started.',
         sending: 'Sending…',
         success:
@@ -335,6 +338,7 @@ export const ui = {
     langLabel: 'TH',
     switchTo: 'EN',
     switchToAria: 'Switch to English',
+    themeToggle: 'สลับโหมดสว่าง / มืด',
 
     nav: {
       home: 'หน้าแรก',
@@ -596,6 +600,8 @@ export const ui = {
         phone: 'เบอร์โทร',
         message: 'อยากบอกอะไรเพิ่มเติมไหม',
         optional: 'ไม่บังคับ',
+        phoneCountry: 'รหัสประเทศ',
+        phonePlaceholder: '81 234 5678',
         messagePlaceholder: 'จะเขียนหรือไม่เขียนก็ได้ — ข้อมูลด้านบนเพียงพอให้เราเริ่มคุยแล้ว',
         sending: 'กำลังส่ง…',
         success: 'ขอบคุณครับ/ค่ะ! เราได้รับข้อความของคุณแล้ว และจะติดต่อกลับโดยเร็ว',

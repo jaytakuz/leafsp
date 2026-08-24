@@ -1,12 +1,16 @@
 # build output
 dist/
+.vercel/
 # dependencies
 node_modules/
 # generated types
 .astro/
 # environment / secrets
+# Astro also reads .env.local and .env.development, so cover every variant
+# and let a committed .env.example through as documentation.
 .env
-.env.production
+.env.*
+!.env.example
 # logs
 npm-debug.log*
 yarn-debug.log*

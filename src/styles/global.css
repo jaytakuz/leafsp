@@ -24,6 +24,17 @@
   --color-lime-500: #8bcb3a;
   --color-lime-600: #6ba828;
 
+  /* Solid button fill. Deliberately identical in both themes and outside the
+     inverted green scale: green-600 lifts to #6ed489 in dark, which would
+     leave white button labels at 1.84:1. */
+  --color-btn: #17853a;
+  --color-btn-hover: #146c31;
+
+  /* Closing CTA panel. Its own pair rather than bg-ink, so the panel can read
+     as vivid brand green in light mode while the footer stays near-black. */
+  --color-cta: #146c31;
+  --color-cta-line: #238f45;
+
   /* Brand dark (deep leaf base) — used for footer / dark sections */
   --color-ink: #0d1f16;
   --color-ink-soft: #12291c;
@@ -74,6 +85,71 @@
     color-scheme: light;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+  }
+
+  /* ----------------------------------------------------------------
+     Dark theme.
+
+     Tokens are overridden rather than utilities, so every bg-surface,
+     text-body and border-border already in the markup follows along
+     without touching a single component. The attribute is set by the
+     inline script in BaseLayout before first paint and flipped by
+     ThemeToggle.
+  ----------------------------------------------------------------- */
+  html[data-theme='dark'] {
+    color-scheme: dark;
+
+    /* The page sits darkest so panels lift off it. */
+    --color-surface: #0a1810;
+    --color-surface-soft: #0d1f16;
+    --color-surface-tint: #102a1c;
+
+    /* Ink is the footer and the About panel. It has to clear the page enough
+       to read as a separate block, but not so much that the fixed-colour
+       lockup sitting on it loses contrast — the wordmark is #50814f, which
+       falls to 2.39:1 by #1d442f. #163322 holds it at 3.00:1, and the raised
+       ink-line carries the edge instead of the fill. The CTA panel is on its
+       own --color-cta and is unaffected by this. */
+    --color-ink: #163322;
+    --color-ink-soft: #1c3f2b;
+    --color-ink-line: #3d7355;
+
+    /* On a dark page the vivid light-mode green would glare, so the CTA panel
+       sits at the same weight as the other ink panels. */
+    --color-cta: #1d442f;
+    --color-cta-line: #36684c;
+
+    --color-text: #e9f1ec;
+    --color-body: #bcccc3;
+    --color-muted: #8b9d94;
+    --color-border: #22392c;
+
+    /* Pale greens are backgrounds, so they invert to dark tints. The mid
+       greens carry text and icons and have to lift instead — green-700 on
+       ink is 2.9:1 and would fail WCAG AA outright. */
+    --color-green-50: #14301f;
+    --color-green-100: #1a3c26;
+    --color-green-200: #24522f;
+    --color-green-300: #3a7f4b;
+    --color-green-400: #55bf70;
+    --color-green-500: #5fcc7a;
+    --color-green-600: #6ed489;
+    --color-green-700: #8ce0a1;
+    --color-green-800: #a9ebb9;
+
+    /* Status panels, so they read as tinted rather than as bright blocks. */
+    --color-red-50: #3a1618;
+    --color-red-700: #ffb3b3;
+    --color-amber-50: #322408;
+    --color-amber-200: #56441a;
+    --color-amber-300: #6b571f;
+    --color-amber-900: #ffe0a6;
+
+    /* Soft light-mode shadows vanish on dark; deepen them. */
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4),
+      0 8px 24px -12px rgba(0, 0, 0, 0.6);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.45),
+      0 18px 40px -24px rgba(0, 0, 0, 0.75);
   }
 
   @media (prefers-reduced-motion: reduce) {
