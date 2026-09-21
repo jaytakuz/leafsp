@@ -108,8 +108,8 @@ The same `dist/` output works on any static host with **zero code changes**:
 
 ## Authors
 
-- [@jaytakuz](https://github.com/jaytakuz)
-- [@itsheroz](https://github.com/itsheroz)
+- [@Watcharapong Wanna](https://github.com/jaytakuz)
+- [@Sittisak Sutthi](https://github.com/itsheroz)
 
 ---
 
