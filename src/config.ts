@@ -117,4 +117,4 @@ export const PROCESS = ['discover', 'design', 'build', 'grow'] as const;
  * of pretending to send it.
  */
 export const CONTACT_ENDPOINT =
-  'https://script.google.com/macros/s/AKfycbwWwwVQj7iHwHtOzpUsQ0Mlw-o2bTmN_Simr2AWsMhgCqb7Lm5CsKgPI81teGceKXzzBw/exec';
+  'https://script.google.com/macros/s/AKfycbymJhYIRbkcryS4K4GeB6GzDXQQ-KUdEjoVMNrT2Y7eAvdNED_lax8O-IFHV0U0FmHEXQ/exec';

@@ -37,8 +37,8 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
   <div class="container-page py-16 md:py-20">
     <div class="reveal is-visible mx-auto max-w-3xl text-center">
       <span class="eyebrow justify-center">{t.contactPage.eyebrow}</span>
-      <h1 class="mt-4 text-4xl md:text-5xl">{t.contactPage.title}</h1>
-      <p class="mt-5 text-lg text-body">{t.contactPage.subtitle}</p>
+      <h1 class="mt-4 text-5xl md:text-6xl">{t.contactPage.title}</h1>
+      <p class="mt-5 text-base text-body md:text-[1.05rem]">{t.contactPage.subtitle}</p>
     </div>
   </div>
 </section>
@@ -145,7 +145,19 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
               placeholder={f.messagePlaceholder}></textarea>
           </div>
 
-          <p class="mt-6 text-sm leading-relaxed text-muted">{f.consent}</p>
+          <label
+            class="mt-6 flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-body"
+            for="cf-consent"
+          >
+            <input
+              class="mt-0.5 h-[1.15rem] w-[1.15rem] shrink-0 cursor-pointer rounded border-border accent-green-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              id="cf-consent"
+              name="consent"
+              type="checkbox"
+              required
+            />
+            <span>{f.consent}</span>
+          </label>
 
           <button
             type="submit"
@@ -182,7 +194,7 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
           </p>
 
           <!--
-            Shown when the Web3Forms key hasn't been configured. The enquiry is
+            Shown when CONTACT_ENDPOINT hasn't been configured. The enquiry is
             rendered here for the visitor to copy rather than pushed into a
             mailto: URL — the Thai answers percent-encode to roughly nine
             characters each, so a filled-in form already lands near the ~2048

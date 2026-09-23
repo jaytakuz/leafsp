@@ -92,15 +92,18 @@ mail as whoever deploys it.
 6. Rebuild (`npm run build`) and re-upload.
 
 Notifications go to `leaf.sandp@gmail.com` (`NOTIFY_TO` at the top of the
-script). The enquirer's address is set as **Reply-To**, so replying in Gmail
-answers the customer.
+script) and are written in Thai. The enquirer's address is set as **Reply-To**,
+so replying in Gmail answers the customer.
 
 ### Afterwards
 
 - **Changing the script** needs a redeploy to take effect: **Deploy → Manage
   deployments → edit → Version: New version**. The URL stays the same.
 - The Sheet's `Status`, `Owner` and `Notes` columns are left empty on purpose —
-  fill them in to track leads.
+  fill them in to track leads. The `Consent` column records the PDPA tick from
+  the form.
+- If the column list in the script changes, the header row is rewritten on the
+  next submission — rows filed under the old layout may need tidying by hand.
 - The endpoint URL is public, so it can receive junk. The form's hidden
   honeypot field and the script's validation catch the obvious cases; add
   [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) if real

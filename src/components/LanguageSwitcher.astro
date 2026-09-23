@@ -1,4 +1,10 @@
 ---
+/**
+ * Language toggle.
+ *
+ * The whole pill is one link to the other language, so a click anywhere
+ * switches — the two halves are labels, not separate targets.
+ */
 import type { Lang } from '../i18n/utils';
 import { localizePath, stripLocale } from '../i18n/utils';
 
@@ -9,34 +15,34 @@ interface Props {
 const { lang, class: className = '' } = Astro.props;
 
 const canonical = stripLocale(Astro.url.pathname);
+const other: Lang = lang === 'th' ? 'en' : 'th';
 const options: { code: Lang; label: string }[] = [
   { code: 'th', label: 'ไทย' },
   { code: 'en', label: 'EN' },
 ];
+
+// Each label is written in the language it switches to, so it reads correctly
+// to whoever is about to need it.
+const action = other === 'en' ? 'Switch to English' : 'เปลี่ยนเป็นภาษาไทย';
 ---
 
-<div
-  class={`inline-flex items-center rounded-full border border-border bg-surface p-0.5 text-[0.8rem] font-semibold ${className}`}
-  role="group"
-  aria-label="Language"
+<a
+  href={localizePath(canonical, other)}
+  hreflang={other}
+  aria-label={action}
+  title={action}
+  class={`inline-flex shrink-0 items-center rounded-full border border-border bg-surface p-0.5 text-[0.8rem] font-semibold transition-colors hover:border-green-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 ${className}`}
 >
   {
-    options.map((opt) => {
-      const active = opt.code === lang;
-      return (
-        <a
-          href={localizePath(canonical, opt.code)}
-          hreflang={opt.code}
-          aria-current={active ? 'true' : undefined}
-          class={`rounded-full px-2.5 py-1 transition-colors ${
-            active
-              ? 'bg-brand-gradient text-white'
-              : 'text-muted hover:text-green-700'
-          }`}
-        >
-          {opt.label}
-        </a>
-      );
-    })
+    options.map((opt) => (
+      <span
+        class:list={[
+          'rounded-full px-2.5 py-1 transition-colors',
+          opt.code === lang ? 'bg-brand-gradient text-white' : 'text-muted',
+        ]}
+      >
+        {opt.label}
+      </span>
+    ))
   }
-</div>
+</a>

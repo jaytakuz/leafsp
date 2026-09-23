@@ -34,8 +34,8 @@ const address = lang === 'th' ? SITE.addressTh : SITE.addressEn;
   </div>
   <div class="container-page py-16 md:py-24">
     <div class="grid items-center gap-12 md:grid-cols-2">
-      <div class="reveal is-visible">
-        <span class="eyebrow">{t.aboutPage.eyebrow}</span>
+      <div class="reveal is-visible text-center">
+        <span class="eyebrow justify-center">{t.aboutPage.eyebrow}</span>
         <h1 class="mt-4 text-4xl md:text-5xl">{t.aboutPage.title}</h1>
         <p class="mt-6 text-lg leading-relaxed text-body">{t.aboutPage.lead}</p>
       </div>
@@ -65,7 +65,7 @@ const address = lang === 'th' ? SITE.addressTh : SITE.addressEn;
 <!-- Mission + Philosophy -->
 <Section bg="soft">
   <div class="grid gap-6 md:grid-cols-2">
-    <div class="reveal rounded-3xl border border-border bg-surface p-8 shadow-soft">
+    <div class="reveal flex flex-col items-center rounded-3xl border border-border bg-surface p-8 text-center shadow-soft">
       <span
         class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600"
       >
@@ -76,7 +76,7 @@ const address = lang === 'th' ? SITE.addressTh : SITE.addressEn;
       </h2>
       <p class="mt-3 leading-relaxed text-body">{t.aboutPage.mission}</p>
     </div>
-    <div class="reveal rounded-3xl border border-border bg-surface p-8 shadow-soft">
+    <div class="reveal flex flex-col items-center rounded-3xl border border-border bg-surface p-8 text-center shadow-soft">
       <span
         class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600"
       >
@@ -98,7 +98,7 @@ const address = lang === 'th' ? SITE.addressTh : SITE.addressEn;
   <div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
     {
       aboutValues.map((key) => (
-        <div class="reveal">
+        <div class="reveal flex flex-col items-center text-center">
           <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600">
             <Icon name={valueIcons[key]} size={24} />
           </div>
