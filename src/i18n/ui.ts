@@ -275,6 +275,8 @@ export const ui = {
         phoneCountry: 'Country dialling code',
         phonePlaceholder: '81 234 5678',
         messagePlaceholder: 'Only if you want to — everything above is enough to get started.',
+        consent:
+          'By sending this form you agree that we use your contact details only to reply to your enquiry.',
         sending: 'Sending…',
         success:
           'Thank you! Your message is on its way — we’ll be in touch shortly.',
@@ -603,6 +605,8 @@ export const ui = {
         phoneCountry: 'รหัสประเทศ',
         phonePlaceholder: '81 234 5678',
         messagePlaceholder: 'จะเขียนหรือไม่เขียนก็ได้ — ข้อมูลด้านบนเพียงพอให้เราเริ่มคุยแล้ว',
+        consent:
+          'การส่งแบบฟอร์มนี้ถือว่าคุณยินยอมให้เราใช้ข้อมูลติดต่อของคุณเพื่อติดต่อกลับเท่านั้น',
         sending: 'กำลังส่ง…',
         success: 'ขอบคุณครับ/ค่ะ! เราได้รับข้อความของคุณแล้ว และจะติดต่อกลับโดยเร็ว',
         error: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง หรืออีเมลถึงเราโดยตรงที่ ',

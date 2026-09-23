@@ -1,7 +1,7 @@
 ---
 import type { Lang } from '../../i18n/utils';
 import { useTranslations } from '../../i18n/utils';
-import { PHONE_COUNTRY_CODES, SITE, WEB3FORMS_ACCESS_KEY } from '../../config';
+import { CONTACT_ENDPOINT, PHONE_COUNTRY_CODES, SITE } from '../../config';
 import Icon from '../Icon.astro';
 import ProjectPicker from '../ProjectPicker.astro';
 
@@ -50,18 +50,7 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
       <div
         class="rounded-3xl border border-border bg-surface p-7 shadow-soft md:p-9"
       >
-        <form
-          id="contact-form"
-          data-access-key={WEB3FORMS_ACCESS_KEY}
-          novalidate
-        >
-          <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
-          <input
-            type="hidden"
-            name="subject"
-            value="New enquiry from leafsp.com"
-          />
-          <input type="hidden" name="from_name" value="leafsp.com" />
+        <form id="contact-form" data-endpoint={CONTACT_ENDPOINT} novalidate>
           <!-- honeypot -->
           <input
             type="checkbox"
@@ -156,9 +145,11 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
               placeholder={f.messagePlaceholder}></textarea>
           </div>
 
+          <p class="mt-6 text-sm leading-relaxed text-muted">{f.consent}</p>
+
           <button
             type="submit"
-            class="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-gradient px-7 py-3.5 text-base font-semibold text-white shadow-[0_16px_40px_-16px_rgba(34,163,69,0.75)] transition-all duration-200 hover:-translate-y-0.5 hover:brightness-[1.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+            class="group mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-gradient px-7 py-3.5 text-base font-semibold text-white shadow-[0_16px_40px_-16px_rgba(34,163,69,0.75)] transition-all duration-200 hover:-translate-y-0.5 hover:brightness-[1.04] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
             data-submit
           >
             <span data-label>{t.cta.sendMessage}</span>
@@ -309,7 +300,7 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
     const copyBtn = form.querySelector('[data-copy]') as HTMLButtonElement;
     const sendingText = { th: 'กำลังส่ง…', en: 'Sending…' };
     const isTh = document.documentElement.lang === 'th';
-    const key = form.getAttribute('data-access-key') || '';
+    const endpoint = form.getAttribute('data-endpoint') || '';
 
     const show = (el: HTMLElement) => el.classList.replace('hidden', 'flex');
     const hide = (el: HTMLElement) => el.classList.replace('flex', 'hidden');
@@ -431,10 +422,10 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
             : dial + typed.replace(/\D/g, '').replace(/^0/, '')
       );
 
-      // Fallback: the Web3Forms key hasn't been configured, so nothing can be
+      // Fallback: the endpoint hasn't been configured, so nothing can be
       // sent. Show the enquiry for the visitor to copy and leave the form
       // filled in — never report success for a message that didn't go out.
-      if (!key || key === 'YOUR_ACCESS_KEY') {
+      if (!endpoint) {
         const body =
           `Name: ${data.get('name')}\n` +
           `Email: ${data.get('email')}\n` +
@@ -454,10 +445,21 @@ const labelBase = 'mb-1.5 block text-sm font-medium text-text';
       btn.disabled = true;
       label.textContent = isTh ? sendingText.th : sendingText.en;
       try {
-        const res = await fetch('https://api.web3forms.com/submit', {
+        const payload: Record<string, string> = {
+          lang: isTh ? 'th' : 'en',
+          pageUrl: window.location.href,
+        };
+        data.forEach((value, name) => {
+          payload[name] = value.toString();
+        });
+
+        // Sent as text/plain so the browser treats this as a "simple" request:
+        // Apps Script web apps can't answer a CORS preflight, and the script
+        // parses the JSON string out of the body itself.
+        const res = await fetch(endpoint, {
           method: 'POST',
-          headers: { Accept: 'application/json' },
-          body: data,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
         });
         const json = await res.json();
         if (json.success) {

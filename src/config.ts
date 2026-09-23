@@ -108,8 +108,13 @@ export const VALUES = ['endToEnd', 'modern', 'secure', 'partnership'] as const;
 export const PROCESS = ['discover', 'design', 'build', 'grow'] as const;
 
 /**
- * Contact form endpoint (Web3Forms — free, no server needed).
- * Replace the access key with your own from https://web3forms.com
- * (create a key with your email; submissions are sent to that inbox).
+ * Contact form endpoint — the Google Apps Script web app in
+ * `scripts/contact-form.gs`, which logs each enquiry to a Google Sheet and
+ * emails the team. Paste the deployment URL here (it ends in `/exec`); see
+ * the "Contact form" section of README.md for how to get one.
+ *
+ * Until it is set, the form shows the enquiry for the visitor to copy instead
+ * of pretending to send it.
  */
-export const WEB3FORMS_ACCESS_KEY = 'YOUR_ACCESS_KEY';
+export const CONTACT_ENDPOINT =
+  'https://script.google.com/macros/s/AKfycbwWwwVQj7iHwHtOzpUsQ0Mlw-o2bTmN_Simr2AWsMhgCqb7Lm5CsKgPI81teGceKXzzBw/exec';

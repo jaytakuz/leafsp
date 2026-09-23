@@ -15,7 +15,7 @@ Thai **cPanel shared hosting**.
 | Styling | [Tailwind CSS 4](https://tailwindcss.com) with brand design tokens |
 | Language | TypeScript |
 | Fonts | Self-hosted via `@fontsource` — IBM Plex Sans / IBM Plex Sans Thai / Space Grotesk (no external requests) |
-| Forms | [Web3Forms](https://web3forms.com) (no backend) with a `mailto:` fallback |
+| Forms | Google Apps Script endpoint → Google Sheet + email notification (no backend to host) |
 | SEO | Sitemap, hreflang, Open Graph, JSON-LD Organization schema |
 
 The whole site ships **almost no JavaScript**, so pages are fast and score
@@ -63,19 +63,49 @@ public/                    # Logos, favicons, og-image, robots.txt, .htaccess, m
 
 ---
 
-## Contact form setup (2 minutes)
+## Contact form setup
 
-The form works out of the box using a **`mailto:` fallback** (it opens the
-visitor's email app pre-filled). To receive submissions silently by email:
+Enquiries are handled by a **Google Apps Script web app** (`scripts/contact-form.gs`):
+it appends one row per enquiry to a Google Sheet and emails the team. There is
+no server to host — the Sheet is the record and the script is the backend.
 
-1. Go to <https://web3forms.com>, enter `leaf.sandp@gmail.com`, and copy the
-   **Access Key** they email you.
-2. Open `src/config.ts` and replace:
+Until `CONTACT_ENDPOINT` is set, the form does not pretend to send: it shows the
+enquiry for the visitor to copy and email in.
+
+### One-time setup (about 10 minutes)
+
+Do this while signed in as **watcharapong5550@gmail.com** — the script sends
+mail as whoever deploys it.
+
+1. Create a Google Sheet (any name, e.g. "leafsp.com enquiries").
+2. In that Sheet: **Extensions → Apps Script**. Delete the sample code, paste
+   the whole of `scripts/contact-form.gs`, and save.
+3. **Deploy → New deployment → Web app** with:
+   - *Execute as:* **Me** (`watcharapong5550@gmail.com`)
+   - *Who has access:* **Anyone**
+4. Approve the permissions prompt (it asks for the Sheet and for sending mail),
+   then copy the **Web app URL** — it ends in `/exec`.
+5. Paste it into `src/config.ts`:
    ```ts
-   export const WEB3FORMS_ACCESS_KEY = 'YOUR_ACCESS_KEY';
+   export const CONTACT_ENDPOINT = 'https://script.google.com/macros/s/…/exec';
    ```
-   with your key.
-3. Rebuild (`npm run build`) and re-upload. Submissions now arrive in your inbox.
+6. Rebuild (`npm run build`) and re-upload.
+
+Notifications go to `leaf.sandp@gmail.com` (`NOTIFY_TO` at the top of the
+script). The enquirer's address is set as **Reply-To**, so replying in Gmail
+answers the customer.
+
+### Afterwards
+
+- **Changing the script** needs a redeploy to take effect: **Deploy → Manage
+  deployments → edit → Version: New version**. The URL stays the same.
+- The Sheet's `Status`, `Owner` and `Notes` columns are left empty on purpose —
+  fill them in to track leads.
+- The endpoint URL is public, so it can receive junk. The form's hidden
+  honeypot field and the script's validation catch the obvious cases; add
+  [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) if real
+  spam starts arriving.
+- Consumer Gmail allows roughly 100 script-sent emails per day.
 
 ---
 
